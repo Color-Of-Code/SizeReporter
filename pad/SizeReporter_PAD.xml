@@ -94,7 +94,7 @@ The tool can be used in scheduled tasks or by scripts on a weekly base for examp
 		<Application_URLs>
 			<Application_Info_URL>http://www.color-of-code.de/index.php?option=com_content&amp;view=article&amp;id=92&amp;Itemid=75</Application_Info_URL>
 			<Application_Order_URL />
-			<Application_Screenshot_URL />
+			<Application_Screenshot_URL>http://www.color-of-code.de/images/sizereporter/SizeReporter.png</Application_Screenshot_URL>
 			<Application_Icon_URL />
 			<Application_XML_File_URL>http://www.color-of-code.de/images/sizereporter/SizeReporter_PAD.xml</Application_XML_File_URL>
 		</Application_URLs>
