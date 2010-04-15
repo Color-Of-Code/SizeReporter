@@ -9,7 +9,7 @@
 		<Company_Name>Color of Code</Company_Name>
 		<Address_1 />
 		<Address_2 />
-		<City_Town />
+		<City_Town>Waldenbuch</City_Town>
 		<State_Province />
 		<Zip_Postal_Code />
 		<Country>Germany</Country>
@@ -82,7 +82,7 @@ Features:
 - One exe only, no need to install, unpack and use
 
 Running it is a childplay:
-	SizeReporter.exe &lt;pathtree to analyse> &lt;depth of reporting>.
+	SizeReporter.exe "pathtree to analyse" "depth of reporting".
 
 During the run, it displays information on the console while generating the CSV report and error log file on disk.
 
@@ -93,9 +93,9 @@ The tool can be used in scheduled tasks or by scripts on a weekly base for examp
 	<Web_Info>
 		<Application_URLs>
 			<Application_Info_URL>http://www.color-of-code.de/index.php?option=com_content&amp;view=article&amp;id=92&amp;Itemid=75</Application_Info_URL>
-			<Application_Order_URL />
+			<Application_Order_URL>http://www.color-of-code.de/index.php?option=com_content&amp;view=article&amp;id=92&amp;Itemid=75</Application_Order_URL>
 			<Application_Screenshot_URL>http://www.color-of-code.de/images/sizereporter/SizeReporter.png</Application_Screenshot_URL>
-			<Application_Icon_URL />
+			<Application_Icon_URL>http://www.color-of-code.de/images/sizereporter/SizeReporter_Icon.png</Application_Icon_URL>
 			<Application_XML_File_URL>http://www.color-of-code.de/images/sizereporter/SizeReporter_PAD.xml</Application_XML_File_URL>
 		</Application_URLs>
 		<Download_URLs>
