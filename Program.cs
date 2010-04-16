@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reflection;
+using System.Threading;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,29 +10,25 @@ namespace SizeReporter
 {
     class Program
     {
-        private static DirectoryInfo _directory;
-        private static Int32 _maxDepth;
+        // parameters:
+        private static DirectoryInfo    _directory;
+        private static Int32            _maxDepth;
+        //private static String           _csvFile;
+        //private static String           _logFile;
+        private static Boolean          _followJunctions = false;
+
         private static UInt32 _clusterSize;
         private static TextWriter _streamResult;
         private static TextWriter _streamErrors;
         private static int _startCharPos;
-        private static Boolean _followJunctions = false;
-
+        
         static void Main(string[] args)
         {
-            if (args.Count() != 2)
-            {
-                Console.WriteLine("SizeReporter.exe <basedirectory> <maxdepth>");
-                Console.WriteLine(@"example: SizeReporter.exe ""C:\Documents and Settings"" 3");
-                Console.WriteLine(@"   generates the report at current location");
-                return;
-            }
-
             try
             {
-                _directory = new DirectoryInfo(args[0]);
-                _maxDepth = Int32.Parse(args[1]);
-
+                if (!ParseParameters(args))
+                    return;
+ 
                 _clusterSize = DetermineClusterSize(_directory.Root.FullName);
 
                 String timestamp = DateTime.Now.ToString("yyyyMMdd-HHmmss");
@@ -54,14 +52,92 @@ namespace SizeReporter
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Error.WriteLine(ex.Message);
-                Console.Error.WriteLine(ex.StackTrace);
+                //Console.Error.WriteLine(ex.StackTrace);
                 Console.ResetColor();
             }
+        }
+
+        private static Boolean ParseParameters(string[] args)
+        {
+            // no parameters
+            if (args.Count() == 0)
+            {
+                DumpHelp();
+                return false;
+            }
+            if (args.Count() < 2)
+                throw new ArgumentException("Not enough arguments");
+
+            Queue<String> parameters = new Queue<string>();
+            foreach (String argument in args)
+                parameters.Enqueue(argument);
+
+            while (parameters.Peek().StartsWith("--"))
+            {
+                String parameter = parameters.Dequeue();
+                switch (parameter)
+                {
+                    case "--help":
+                        DumpHelp();
+                        return false;
+                    case "--version":
+                        DumpVersion();
+                        return false;
+                    case "--junctions":
+                        _followJunctions = true;
+                        break;
+                    default:
+                        throw new ArgumentException(String.Format("Unknown option {0}", parameter));
+                }
+            }
+
+            if (parameters.Count < 2)
+                throw new ArgumentException("Not enough arguments after parsing the options");
+            if (parameters.Count > 2)
+                throw new ArgumentException("Too many arguments left after parsing the options");
+
+            String path = parameters.Dequeue();
+            _directory = new DirectoryInfo(path);
+            if (!_directory.Exists)
+                throw new DirectoryNotFoundException(String.Format("Directory \"{0}\" not found", path));
+
+            String depth = parameters.Dequeue();
+            if (!Int32.TryParse(depth, out _maxDepth))
+                throw new FormatException(String.Format("The maxdepth parameter \"{0}\" is not an integer!", depth));
+
+            return true;
+        }
+
+        private static void DumpHelp()
+        {
+            Console.WriteLine(@"Usage:");
+            Console.WriteLine(@"  SizeReporter.exe [options] <basedirectory> <maxdepth>");
+            Console.WriteLine();
+            Console.WriteLine(@"  The tool generates the CSV report and error log at current location");
+            Console.WriteLine();
+            Console.WriteLine(@"Options:");
+            Console.WriteLine(@"--help:      display help and exit");
+            Console.WriteLine(@"--version:   display version information and exit");
+            Console.WriteLine(@"--junctions: include contents linked over junctions/reparse points");
+            Console.WriteLine();
+            Console.WriteLine(@"Example:");
+            Console.WriteLine(@"  SizeReporter.exe ""C:\Documents and Settings"" 3");
+            Console.WriteLine();
+            DumpVersion();
+        }
+
+        private static void DumpVersion()
+        {
+            Console.WriteLine(@"Version: {0}", Assembly.GetExecutingAssembly().GetName().Version);
+            Console.WriteLine(@"Author:");
+            Console.WriteLine(@"  Jaap de Haan <jaap.dehaan@color-of-code.de>");
+            Console.WriteLine(@"  http://www.color-of-code.de");
         }
 
         private static PathStatistics Process(String directory, Int32 depth)
         {
             PathStatistics stats = new PathStatistics();
+            RefreshLastModified(ref stats, directory);
             if (depth <= _maxDepth)
             {
                 OutputCurrentPosition(directory);
@@ -71,6 +147,7 @@ namespace SizeReporter
                 try
                 {
                     stats += Process(directorypath, depth + 1);
+                    RefreshLastModified(ref stats, directorypath);
                     stats.DirectoryCount++;
                 }
                 catch (Exception exception)
@@ -98,16 +175,7 @@ namespace SizeReporter
                     UInt64 clusters = (csize + _clusterSize - 1) / _clusterSize;
                     stats.VirtualSize += vsize;
                     stats.SizeOnDisk  += clusters * _clusterSize;
-                    if (lastModified > DateTime.Now.AddDays(1))
-                    {
-                        DumpWarning(filepath, 
-                            String.Format(" -> date of last modification lies in future (ignored)! ({0})",
-                            lastModified.ToString("yyyy-MM-dd HH:mm:ss")));
-                    }
-                    else
-                    {
-                        stats.RefreshLastModified(lastModified);
-                    }
+                    UpdateLastModified(ref stats, filepath, ref lastModified);
                     stats.FileCount++;
                 }
                 catch (Exception exception)
@@ -121,6 +189,27 @@ namespace SizeReporter
                 OutputResultLine(directory, depth, stats);
             }
             return stats;
+        }
+
+        private static void UpdateLastModified(ref PathStatistics stats, String filepath, ref DateTime lastModified)
+        {
+            if (lastModified > DateTime.Now.AddDays(1))
+            {
+                DumpWarning(filepath,
+                    String.Format(" -> date of last modification lies in future (ignored)! ({0})",
+                    lastModified.ToString("yyyy-MM-dd HH:mm:ss")));
+            }
+            else
+            {
+                stats.RefreshLastModified(lastModified);
+            }
+        }
+
+        private static void RefreshLastModified(ref PathStatistics stats, String directorypath)
+        {
+            DateTime lastModified;
+            FileUtil.GetLastModified(directorypath, out lastModified);
+            UpdateLastModified(ref stats, directorypath, ref lastModified);
         }
 
         private static void ClearConsoleLine()

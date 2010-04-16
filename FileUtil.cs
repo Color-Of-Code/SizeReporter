@@ -285,9 +285,9 @@ namespace SizeReporter
                 {
                     string currentFileName = findData.cFileName;
 
-                    if (followLinks || (findData.dwFileAttributes & FileAttributes.ReparsePoint) == 0)
+                    if ((findData.dwFileAttributes & FileAttributes.Directory) != 0)
                     {
-                        if ((findData.dwFileAttributes & FileAttributes.Directory) != 0)
+                        if (followLinks || (findData.dwFileAttributes & FileAttributes.ReparsePoint) == 0)
                         {
                             if (currentFileName != "." && currentFileName != "..")
                             {
@@ -339,7 +339,20 @@ namespace SizeReporter
                 lastModified = DateTime.FromFileTime(filetime);
                 return;
             }
-            throw new Exception("Could not get file size");
+            throw new Exception("Could not get file attributes");
+        }
+
+        public static void GetLastModified(string filename, out DateTime lastModified)
+        {
+            GET_FILEEX_INFO_LEVELS levels = GET_FILEEX_INFO_LEVELS.GetFileExInfoStandard;
+            WIN32_FILE_ATTRIBUTE_DATA result;
+            if (_GetFileAttributesEx(filename, levels, out result))
+            {
+                Int64 filetime = ((long)result.ftLastWriteTime.dwHighDateTime << 32) + result.ftLastWriteTime.dwLowDateTime;
+                lastModified = DateTime.FromFileTime(filetime);
+                return;
+            }
+            throw new Exception("Could not get file attributes");
         }
 
         // Assume filename passed in is already prefixed with \\?\

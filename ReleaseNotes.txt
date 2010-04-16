@@ -1,0 +1,15 @@
+﻿
+Planned
+	- XML report
+	- specify name of report/log file
+	- verbosity option
+	- user defined separator for CSV
+	- good support of csv so loading in Excel works directly
+
+1.0.1 - 2010-04-16
+	- Fix for directory date reporting for empty directories
+	- Added options --version and --help to dump tool information on the console
+	- Added option --junctions to include sizes of directories bound using NTFS junctions
+
+1.0.0 - 2010-04-14
+	- First public release
