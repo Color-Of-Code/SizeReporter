@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,8 @@ namespace SizeReporter.Options
         public Int32 MaxDepth { get; private set; }
         public Boolean FollowJunctions { get; private set; }
         public Boolean BeQuiet { get; private set; }
+        public Boolean Tsv { get; private set; }
+        public CultureInfo Culture { get; private set; }
         //public static String           _csvFile;
         //public static String           _logFile;
 
@@ -42,6 +45,7 @@ namespace SizeReporter.Options
             foreach (String argument in args)
                 parameters.Enqueue(argument);
 
+            String culture = null;
             while (parameters.Peek().StartsWith("--"))
             {
                 String parameter = parameters.Dequeue();
@@ -58,6 +62,12 @@ namespace SizeReporter.Options
                         break;
                     case "--quiet":
                         BeQuiet = true;
+                        break;
+                    case "--tsv":
+                        Tsv = true;
+                        break;
+                    case "--culture":
+                        culture = parameters.Dequeue();
                         break;
                     default:
                         throw new ArgumentException(String.Format("Unknown option {0}", parameter));
@@ -79,6 +89,8 @@ namespace SizeReporter.Options
             if (!Int32.TryParse(depth, out maxDepth))
                 throw new FormatException(String.Format("The maxdepth parameter \"{0}\" is not an integer!", depth));
             MaxDepth = maxDepth;
+            if (culture != null)
+                Culture = new CultureInfo(culture);
             return true;
         }
 
@@ -87,13 +99,15 @@ namespace SizeReporter.Options
             Console.WriteLine(@"Usage:");
             Console.WriteLine(@"  SizeReporter.exe [options] <basedirectory> <maxdepth>");
             Console.WriteLine();
-            Console.WriteLine(@"  The tool generates the CSV report and error log at current location");
+            Console.WriteLine(@"  The tool generates a TSV/CSV report and error log at current location");
             Console.WriteLine();
             Console.WriteLine(@"Options:");
+            Console.WriteLine(@"--culture:   use the specified culture ""en-US"" for example");
             Console.WriteLine(@"--help:      display help and exit");
-            Console.WriteLine(@"--version:   display version information and exit");
             Console.WriteLine(@"--junctions: include contents linked over junctions/reparse points");
             Console.WriteLine(@"--quiet:     do not display anything to the console");
+            Console.WriteLine(@"--tsv:       generate tab separated values (TSV) instead of default MS compatible CSV");
+            Console.WriteLine(@"--version:   display version information and exit");
             Console.WriteLine();
             Console.WriteLine(@"Example:");
             Console.WriteLine(@"  SizeReporter.exe ""C:\Documents and Settings"" 3");

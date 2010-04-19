@@ -23,20 +23,21 @@ namespace SizeReporter
         
         static void Main(string[] args)
         {
-            CultureInfo culture = new CultureInfo("en-US");
-            Thread.CurrentThread.CurrentCulture = culture; 
-
             try
             {
                 _options = new Options.Options(args);
                 if (_options.Exit) 
                     return;
- 
+
+                if (_options.Culture != null)
+                    Thread.CurrentThread.CurrentCulture = _options.Culture;
+
                 _clusterSize = DetermineClusterSize(_options.Directory.Root.FullName);
 
                 _timeStart = DateTime.Now;
                 String timestamp = _timeStart.ToString("yyyyMMdd-HHmmss");
-                String filename1 = String.Format("sizereport_result_{0}.csv", timestamp);
+                String extension = "csv";
+                String filename1 = String.Format("sizereport_result_{0}.{1}", timestamp, extension);
                 String filename2 = String.Format("sizereport_errors_{0}.log", timestamp);
                 using (TextWriter _streamResult = File.CreateText(filename1))
                 {
@@ -63,7 +64,7 @@ namespace SizeReporter
             _startCharPos = path.Length;
 
             _log = new Output.LogOutput(streamErrors, path.Length, _options.BeQuiet);
-            _report = new Output.ResultOutput(streamResult, path.Length, _options.BeQuiet);
+            _report = new Output.ResultOutput(streamResult, path.Length, _options.BeQuiet, _options.Tsv);
 
             _log.LogInfo("Start at {0:yyyy-MM-dd HH:mm:ss}", _timeStart);
             ConsoleWrite("Generating result into {0}", filename1);

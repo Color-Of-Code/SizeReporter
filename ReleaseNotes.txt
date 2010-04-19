@@ -7,12 +7,12 @@ Planned
 	- report files with zero size
 	- Name of report and log file can be specified on the command line
 	- option verbose displays more or less information on the console
-	- support of MS csv so loading in Excel works directly
 
 1.0.2 - 2010-04-19
 	- option --quiet outputs nothing to the console but fatal errors
 	- report start/end time and duration to the log file
-	- uses always en_US locale to get the same output on all PCs (',' or '.' problem)
+	- option --culture to specify the locale to use otherwise uses default locale for the system
+	- support of MS csv so loading in Excel works directly, --tsv as option
 
 1.0.1 - 2010-04-16
 	- Fix for directory date reporting for empty directories
