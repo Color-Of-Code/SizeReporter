@@ -48,6 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileUtil.cs" />
+    <Compile Include="Options\Options.cs" />
+    <Compile Include="Output\LogOutput.cs" />
+    <Compile Include="Output\ResultOutput.cs" />
     <Compile Include="PathStatistics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
