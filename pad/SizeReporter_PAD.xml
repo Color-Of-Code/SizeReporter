@@ -34,26 +34,26 @@
 	</Company_Info>
 	<Program_Info>
 		<Program_Name>SizeReporter</Program_Name>
-		<Program_Version>1.0.1</Program_Version>
+		<Program_Version>1.0.2</Program_Version>
 		<Program_Release_Month>04</Program_Release_Month>
-		<Program_Release_Day>16</Program_Release_Day>
+		<Program_Release_Day>19</Program_Release_Day>
 		<Program_Release_Year>2010</Program_Release_Year>
 		<Program_Cost_Dollars />
 		<Program_Cost_Other_Code />
 		<Program_Cost_Other />
 		<Program_Type>Freeware</Program_Type>
-		<Program_Release_Status>New Release</Program_Release_Status>
+		<Program_Release_Status>Minor Update</Program_Release_Status>
 		<Program_Install_Support>No Install Support</Program_Install_Support>
 		<Program_OS_Support>Win7 x32,Win7 x64,WinServer,WinVista,WinVista x64,WinXP</Program_OS_Support>
 		<Program_Language>English</Program_Language>
-		<Program_Change_Info>Directory timestamp fix, added option to include junctions</Program_Change_Info>
+		<Program_Change_Info>Support cultures, quiet option, start/end time and duration report, direct loading for Excel</Program_Change_Info>
 		<Program_Specific_Category>Utilities</Program_Specific_Category>
 		<Program_Category_Class>System Utilities::File &amp; Disk Management</Program_Category_Class>
 		<Program_System_Requirements>.NET 3.5</Program_System_Requirements>
 		<File_Info>
-			<File_Size_Bytes>23552</File_Size_Bytes>
-			<File_Size_K>23</File_Size_K>
-			<File_Size_MB>0.02</File_Size_MB>
+			<File_Size_Bytes>27136</File_Size_Bytes>
+			<File_Size_K>26</File_Size_K>
+			<File_Size_MB>0.03</File_Size_MB>
 		</File_Info>
 		<Expire_Info>
 			<Has_Expire_Info>N</Has_Expire_Info>
@@ -67,12 +67,12 @@
 	</Program_Info>
 	<Program_Descriptions>
 		<English>
-			<Keywords>disk space usage files directories folders last modification timestamp report csv command line tool</Keywords>
-			<Char_Desc_45>Generate a csv report of disk usage</Char_Desc_45>
-			<Char_Desc_80>Generate a csv report of disk usage</Char_Desc_80>
+			<Keywords>disk space, files, directories, folders, last modification, csv, tsv, report, command line, analyze, long path, junction, no gui, excel, calculate</Keywords>
+			<Char_Desc_45>Generate a report of disk usage</Char_Desc_45>
+			<Char_Desc_80>Generate a tsv/csv report of disk space usage</Char_Desc_80>
 			<Char_Desc_250>Generate a csv report of disk usage that can be used to determine the directories consuming most disk space</Char_Desc_250>
-			<Char_Desc_450>Generate a csv report of disk usage that can be used to determine the directories consuming most disk space. Supports long paths and special characters in path names. Reports last modification timestamp in a smart way (gets rid of wrong dates). The tool can be used in scheduled tasks or by scripts on a weekly base for example.</Char_Desc_450>
-			<Char_Desc_2000>Generate a csv report of disk usage that can be used to determine the directories consuming most disk space.
+			<Char_Desc_450>Generate a TSV/CSV report of disk usage that can be used to determine the directories consuming most disk space. Supports long paths and special characters in path names. Reports last modification timestamp in a smart way (gets rid of wrong dates). The tool can be used in scheduled tasks or by scripts on a weekly base for example.</Char_Desc_450>
+			<Char_Desc_2000>Generate a report of disk usage that can be used to determine the directories consuming most disk space.
 
 Features:
 - Supports long paths and special characters in path names.
@@ -80,11 +80,13 @@ Features:
 - Skips junctions as they do not consume space, optionally also includes them
 - Directories sorted alphabetically in the report for easier comparison
 - One exe only, no need to install, unpack and use
+- No GUI, no pop-ups (can be used by services, CruiseControl, ...)
+- Allows specification of the locale to be used ('.'/',' issue for decimal values)
 
 Running it is a childplay:
 	SizeReporter.exe [options] "pathtree to analyse" "depth of reporting".
 
-During the run, it displays information on the console while generating the CSV report and error log file on disk.
+During the run, it displays information on the console while generating the report and error log file on disk.
 
 The tool can be used in scheduled tasks or by scripts on a weekly base for example. The report contains the directories sorted alphabetically thus produces results that can be compared from run to run.
 </Char_Desc_2000>
@@ -99,15 +101,17 @@ The tool can be used in scheduled tasks or by scripts on a weekly base for examp
 			<Application_XML_File_URL>http://www.color-of-code.de/images/sizereporter/SizeReporter_PAD.xml</Application_XML_File_URL>
 		</Application_URLs>
 		<Download_URLs>
-			<Primary_Download_URL>http://www.color-of-code.de/images/sizereporter/SizeReporter-1.0.1.zip</Primary_Download_URL>
+			<Primary_Download_URL>http://www.color-of-code.de/images/sizereporter/SizeReporter-1.0.2.zip</Primary_Download_URL>
 			<Secondary_Download_URL>http://www.color-of-code.de/images/sizereporter/SizeReporter.zip</Secondary_Download_URL>
 			<Additional_Download_URL_1 />
 			<Additional_Download_URL_2 />
 		</Download_URLs>
 	</Web_Info>
 	<Permissions>
-		<Distribution_Permissions>Freeware, provided as is, use it as you like, but do not modify the executable.</Distribution_Permissions>
-		<EULA>Freeware, provided as is, use it as you like, but do not modify the executable.</EULA>
+		<Distribution_Permissions>Freeware, provided as is, use it as you like, but do not modify the executable.
+</Distribution_Permissions>
+		<EULA>Freeware, provided as is, use it as you like, but do not modify the executable.
+Please send me feedback per EMail to tell me what you like/dislike.</EULA>
 	</Permissions>
 	<Affiliates>
 		<Affiliates_FORM>Y</Affiliates_FORM>
