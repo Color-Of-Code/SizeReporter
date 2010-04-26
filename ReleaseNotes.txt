@@ -8,6 +8,9 @@ Planned
 	- Name of report and log file can be specified on the command line
 	- option verbose displays more or less information on the console
 
+1.0.3 - 2010-04-26
+	- fixed --version & --help flags
+
 1.0.2 - 2010-04-19
 	- option --quiet outputs nothing to the console but fatal errors
 	- report start/end time and duration to the log file

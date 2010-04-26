@@ -38,8 +38,6 @@ namespace SizeReporter.Options
                 DumpHelp();
                 return false;
             }
-            if (args.Count() < 2)
-                throw new ArgumentException("Not enough arguments");
 
             Queue<String> parameters = new Queue<string>();
             foreach (String argument in args)
