@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SizeReporter.Output
 {
-    internal class ResultOutput
+    internal class CsvResultOutput : IResultWriter
     {
         private Boolean _quiet = false;
         //private Boolean _verbose;
@@ -14,7 +14,7 @@ namespace SizeReporter.Output
         private int _startCharPos;
         private String _separator;
 
-        public ResultOutput(TextWriter tw, int startPos, Boolean quiet, Boolean tabSeparated)
+        public CsvResultOutput(TextWriter tw, int startPos, Boolean quiet, Boolean tabSeparated)
         {
             if (tabSeparated)
                 _separator = "\t";
@@ -54,5 +54,9 @@ namespace SizeReporter.Output
         //    value = value.PadRight(maxlen);
         //    Console.Write("\r{0}\r", value);
         //}
+
+        public void ReportFooter()
+        {
+        }
     }
 }

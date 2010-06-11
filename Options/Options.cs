@@ -14,7 +14,9 @@ namespace SizeReporter.Options
         public Int32 MaxDepth { get; private set; }
         public Boolean FollowJunctions { get; private set; }
         public Boolean BeQuiet { get; private set; }
+        public Boolean ReportEmpty { get; private set; }
         public Boolean Tsv { get; private set; }
+        public Boolean Xml { get; private set; }
         public CultureInfo Culture { get; private set; }
         //public static String           _csvFile;
         //public static String           _logFile;
@@ -23,6 +25,7 @@ namespace SizeReporter.Options
         {
             FollowJunctions = false;
             BeQuiet = false;
+            ReportEmpty = false;
 
             Exit = !ParseParameters(args);
         }
@@ -60,6 +63,12 @@ namespace SizeReporter.Options
                         break;
                     case "--quiet":
                         BeQuiet = true;
+                        break;
+                    case "--xml":
+                        Xml = true;
+                        break;
+                    case "--empty":
+                        ReportEmpty = true;
                         break;
                     case "--tsv":
                         Tsv = true;
@@ -101,10 +110,12 @@ namespace SizeReporter.Options
             Console.WriteLine();
             Console.WriteLine(@"Options:");
             Console.WriteLine(@"--culture:   use the specified culture ""en-US"" for example");
+            Console.WriteLine(@"--empty:     make a list of all empty files (size 0)");
             Console.WriteLine(@"--help:      display help and exit");
             Console.WriteLine(@"--junctions: include contents linked over junctions/reparse points");
             Console.WriteLine(@"--quiet:     do not display anything to the console");
             Console.WriteLine(@"--tsv:       generate tab separated values (TSV) instead of default MS compatible CSV");
+            Console.WriteLine(@"--xml:       generate XML output");
             Console.WriteLine(@"--version:   display version information and exit");
             Console.WriteLine();
             Console.WriteLine(@"Example:");

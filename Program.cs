@@ -14,12 +14,13 @@ namespace SizeReporter
         private static Options.Options  _options;
         private static DateTime         _timeStart;
         private static DateTime         _timeEnd;
+        private static List<String>     _emptyFiles;
 
         private static UInt32 _clusterSize;
         private static int _startCharPos;
 
         private static Output.LogOutput _log;
-        private static Output.ResultOutput _report;
+        private static Output.IResultWriter _report;
         
         static void Main(string[] args)
         {
@@ -28,6 +29,9 @@ namespace SizeReporter
                 _options = new Options.Options(args);
                 if (_options.Exit) 
                     return;
+
+                if (_options.ReportEmpty)
+                    _emptyFiles = new List<string>();
 
                 if (_options.Culture != null)
                     Thread.CurrentThread.CurrentCulture = _options.Culture;
@@ -44,6 +48,16 @@ namespace SizeReporter
                     using (TextWriter streamErrors = File.CreateText(filename2))
                     {
                         PerformJob(_streamResult, streamErrors, filename1, filename2);
+                    }
+                }
+
+                if (_options.ReportEmpty)
+                {
+                    String filename = String.Format("sizereport_emptyfiles_{0}.log", timestamp);
+                    using (TextWriter stream = File.CreateText(filename))
+                    {
+                        foreach (String file in _emptyFiles)
+                            stream.WriteLine(file);
                     }
                 }
             }
@@ -64,7 +78,10 @@ namespace SizeReporter
             _startCharPos = path.Length;
 
             _log = new Output.LogOutput(streamErrors, path.Length, _options.BeQuiet);
-            _report = new Output.ResultOutput(streamResult, path.Length, _options.BeQuiet, _options.Tsv);
+            if (_options.Xml)
+                _report = new Output.XmlResultOutput(streamResult, path.Length, _options.BeQuiet);
+            else
+                _report = new Output.CsvResultOutput(streamResult, path.Length, _options.BeQuiet, _options.Tsv);
 
             _log.LogInfo("Start at {0:yyyy-MM-dd HH:mm:ss}", _timeStart);
             ConsoleWrite("Generating result into {0}", filename1);
@@ -116,6 +133,8 @@ namespace SizeReporter
                             String.Format(" -> compressed size > real size! ({0}>{1})",
                             csize, vsize));
                     }
+                    if (_emptyFiles != null && vsize == 0)
+                        _emptyFiles.Add(filepath);
 
                     UInt64 clusters = (csize + _clusterSize - 1) / _clusterSize;
                     stats.VirtualSize += vsize;

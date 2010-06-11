@@ -3,10 +3,12 @@ Planned
 	- XML report
 	- HTML report
 	- user defined separator for CSV
-	- report top n biggest files
-	- report files with zero size
 	- Name of report and log file can be specified on the command line
 	- option verbose displays more or less information on the console
+	- report top n biggest files
+
+1.0.4 - 2010-06-12
+	- option --empty to report files with zero size
 
 1.0.3 - 2010-04-26
 	- fixed --version & --help flags
