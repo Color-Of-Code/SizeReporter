@@ -1,6 +1,5 @@
 ﻿
 Planned
-	- XML report
 	- HTML report
 	- user defined separator for CSV
 	- Name of report and log file can be specified on the command line
@@ -9,6 +8,7 @@ Planned
 
 1.0.4 - 2010-06-12
 	- option --empty to report files with zero size
+	- option --xml to generate an XML report instead of csv/tsv
 
 1.0.3 - 2010-04-26
 	- fixed --version & --help flags
