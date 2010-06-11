@@ -40,9 +40,13 @@ namespace SizeReporter
 
                 _timeStart = DateTime.Now;
                 String timestamp = _timeStart.ToString("yyyyMMdd-HHmmss");
+                
                 String extension = "csv";
+                if (_options.Xml)
+                    extension = "xml";
                 String filename1 = String.Format("sizereport_result_{0}.{1}", timestamp, extension);
-                String filename2 = String.Format("sizereport_errors_{0}.log", timestamp);
+
+                String filename2 = String.Format("sizereport_errors_{0}.log", timestamp); ;
                 using (TextWriter _streamResult = File.CreateText(filename1))
                 {
                     using (TextWriter streamErrors = File.CreateText(filename2))
