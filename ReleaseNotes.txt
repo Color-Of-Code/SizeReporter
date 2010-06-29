@@ -5,6 +5,10 @@ Planned
 	- Name of report and log file can be specified on the command line
 	- option verbose displays more or less information on the console
 	- report top n biggest files
+	- ignore temporary files like thumbs.db, ...
+
+1.0.5 - 2010-06-12
+    - reduced dependency to .NET 2.0
 
 1.0.4 - 2010-06-12
 	- option --empty to report files with zero size

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Globalization;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Reflection;
 
@@ -36,7 +35,7 @@ namespace SizeReporter.Options
         private Boolean ParseParameters(string[] args)
         {
             // no parameters
-            if (args.Count() == 0)
+            if (args.Length == 0)
             {
                 DumpHelp();
                 return false;
