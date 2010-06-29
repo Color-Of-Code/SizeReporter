@@ -34,9 +34,9 @@
 	</Company_Info>
 	<Program_Info>
 		<Program_Name>SizeReporter</Program_Name>
-		<Program_Version>1.0.3</Program_Version>
-		<Program_Release_Month>04</Program_Release_Month>
-		<Program_Release_Day>26</Program_Release_Day>
+		<Program_Version>1.0.4</Program_Version>
+		<Program_Release_Month>06</Program_Release_Month>
+		<Program_Release_Day>11</Program_Release_Day>
 		<Program_Release_Year>2010</Program_Release_Year>
 		<Program_Cost_Dollars />
 		<Program_Cost_Other_Code />
@@ -46,14 +46,14 @@
 		<Program_Install_Support>No Install Support</Program_Install_Support>
 		<Program_OS_Support>Win7 x32,Win7 x64,WinServer,WinVista,WinVista x64,WinXP</Program_OS_Support>
 		<Program_Language>English</Program_Language>
-		<Program_Change_Info>Fixed --version &amp; --help flags</Program_Change_Info>
+		<Program_Change_Info>Implemented XML export and reporting of empty files</Program_Change_Info>
 		<Program_Specific_Category>Utilities</Program_Specific_Category>
 		<Program_Category_Class>System Utilities::File &amp; Disk Management</Program_Category_Class>
 		<Program_System_Requirements>.NET 3.5</Program_System_Requirements>
 		<File_Info>
-			<File_Size_Bytes>27136</File_Size_Bytes>
-			<File_Size_K>26</File_Size_K>
-			<File_Size_MB>0.03</File_Size_MB>
+			<File_Size_Bytes>14606</File_Size_Bytes>
+			<File_Size_K>14</File_Size_K>
+			<File_Size_MB>0.01</File_Size_MB>
 		</File_Info>
 		<Expire_Info>
 			<Has_Expire_Info>N</Has_Expire_Info>
@@ -67,11 +67,11 @@
 	</Program_Info>
 	<Program_Descriptions>
 		<English>
-			<Keywords>disk space, files, directories, folders, last modification, csv, tsv, report, command line, analyze, long path, junction, no gui, excel, calculate</Keywords>
+			<Keywords>disk space, files, directories, folders, last modification, csv, tsv, xml, report, command line, analyze, long path, junction, no gui, excel, calculate</Keywords>
 			<Char_Desc_45>Generate a report of disk usage</Char_Desc_45>
-			<Char_Desc_80>Generate a tsv/csv report of disk space usage</Char_Desc_80>
-			<Char_Desc_250>Generate a csv report of disk usage that can be used to determine the directories consuming most disk space</Char_Desc_250>
-			<Char_Desc_450>Generate a TSV/CSV report of disk usage that can be used to determine the directories consuming most disk space. Supports long paths and special characters in path names. Reports last modification timestamp in a smart way (gets rid of wrong dates). The tool can be used in scheduled tasks or by scripts on a weekly base for example.</Char_Desc_450>
+			<Char_Desc_80>Generate a tsv/csv/xml report of disk space usage</Char_Desc_80>
+			<Char_Desc_250>Generate a report of disk usage that can be used to determine the directories consuming most disk space</Char_Desc_250>
+			<Char_Desc_450>Generate a TSV/CSV/XML report of disk usage that can be used to determine the directories consuming most disk space. Supports long paths and special characters in path names. Reports last modification timestamp in a smart way (gets rid of wrong dates). The tool can be used in scheduled tasks or by scripts on a weekly base for example.</Char_Desc_450>
 			<Char_Desc_2000>Generate a report of disk usage that can be used to determine the directories consuming most disk space.
 
 Features:
@@ -82,6 +82,8 @@ Features:
 - One exe only, no need to install, unpack and use
 - No GUI, no pop-ups (can be used by services, CruiseControl, ...)
 - Allows specification of the locale to be used ('.'/',' issue for decimal values)
+- Optional generation of a XML report
+- Optional report all empty files (zero bytes sized)
 
 Running it is a childplay:
 	SizeReporter.exe [options] "pathtree to analyse" "depth of reporting".
@@ -101,7 +103,7 @@ The tool can be used in scheduled tasks or by scripts on a weekly base for examp
 			<Application_XML_File_URL>http://www.color-of-code.de/images/sizereporter/SizeReporter_PAD.xml</Application_XML_File_URL>
 		</Application_URLs>
 		<Download_URLs>
-			<Primary_Download_URL>http://www.color-of-code.de/images/sizereporter/SizeReporter-1.0.3.zip</Primary_Download_URL>
+			<Primary_Download_URL>http://www.color-of-code.de/images/sizereporter/SizeReporter-1.0.4.zip</Primary_Download_URL>
 			<Secondary_Download_URL>http://www.color-of-code.de/images/sizereporter/SizeReporter.zip</Secondary_Download_URL>
 			<Additional_Download_URL_1 />
 			<Additional_Download_URL_2 />
