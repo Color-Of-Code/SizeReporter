@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <XML_DIZ_INFO>
 	<MASTER_PAD_VERSION_INFO>
 		<MASTER_PAD_VERSION>3.10</MASTER_PAD_VERSION>
@@ -35,9 +35,9 @@
 	<Program_Info>
 		<Program_Name>SizeReporter</Program_Name>
 		<Program_Version>1.1.0</Program_Version>
-		<Program_Release_Month>06</Program_Release_Month>
-		<Program_Release_Day>11</Program_Release_Day>
-		<Program_Release_Year>2010</Program_Release_Year>
+		<Program_Release_Month>02</Program_Release_Month>
+		<Program_Release_Day>22</Program_Release_Day>
+		<Program_Release_Year>2011</Program_Release_Year>
 		<Program_Cost_Dollars />
 		<Program_Cost_Other_Code />
 		<Program_Cost_Other />
@@ -51,9 +51,9 @@
 		<Program_Category_Class>System Utilities::File &amp; Disk Management</Program_Category_Class>
 		<Program_System_Requirements>.NET 3.5</Program_System_Requirements>
 		<File_Info>
-			<File_Size_Bytes>14606</File_Size_Bytes>
-			<File_Size_K>14</File_Size_K>
-			<File_Size_MB>0.01</File_Size_MB>
+			<File_Size_Bytes>21170</File_Size_Bytes>
+			<File_Size_K>20</File_Size_K>
+			<File_Size_MB>0.02</File_Size_MB>
 		</File_Info>
 		<Expire_Info>
 			<Has_Expire_Info>N</Has_Expire_Info>
@@ -67,7 +67,7 @@
 	</Program_Info>
 	<Program_Descriptions>
 		<English>
-			<Keywords>disk space, files, directories, folders, last modification, csv, tsv, xml, report, command line, analyze, long path, junction, no gui, excel, calculate</Keywords>
+			<Keywords>disk space, files, directories, folders, last modification, csv, tsv, xml, report, command line, analyze, long path, junction, no gui, excel, calculate, list</Keywords>
 			<Char_Desc_45>Generate a report of disk usage</Char_Desc_45>
 			<Char_Desc_80>Generate a tsv/csv/xml report of disk space usage</Char_Desc_80>
 			<Char_Desc_250>Generate a report of disk usage that can be used to determine the directories consuming most disk space</Char_Desc_250>
@@ -84,6 +84,7 @@ Features:
 - Allows specification of the locale to be used ('.'/',' issue for decimal values)
 - Optional generation of a XML report
 - Optional report all empty files (zero bytes sized)
+- Provide a list of junctions
 
 Running it is a childplay:
 	SizeReporter.exe [options] "pathtree to analyse" "depth of reporting".
@@ -110,10 +111,138 @@ The tool can be used in scheduled tasks or by scripts on a weekly base for examp
 		</Download_URLs>
 	</Web_Info>
 	<Permissions>
-		<Distribution_Permissions>Freeware, provided as is, use it as you like, but do not modify the executable.
+		<Distribution_Permissions>REDISTRIBUTION 
+
+o The Software can be copied and distributed under the condition that 
+  original license agreement and disclaimer of warranty will stay intact 
+  and the Licensee will not charge money or fees for the Software 
+  product, except to cover distribution costs.
+o If you distribute the software as part of a publication (magazine,
+  periodical, ...), either 
+  - send one copy of the printed issue to following address, free of 
+    charge:
+		Jaap de Haan
+		Tilsiter Weg 2
+		71111 Waldenbuch
+		Germany
+  - or send an electronic version of the issue, free of charge, to
+		jaap.dehaan@color-of-code.de
 </Distribution_Permissions>
-		<EULA>Freeware, provided as is, use it as you like, but do not modify the executable.
-Please send me feedback per EMail to tell me what you like/dislike.</EULA>
+		<EULA>FREEWARE SOFTWARE LICENSE AGREEMENT 
+
+Copyright 2010-2011 Jaap de Haan, http://www.color-of-code.de 
+
+NOTICE TO USER: 
+
+You may not use this software except in compliance with the License. 
+
+Please, read this carefully. By using all or any portion of the Software 
+you accept all the terms and conditions of this Agreement. If you do not 
+agree, do not use this Software. 
+
+
+1. DEFINITIONS 
+
+“License” shall mean the terms and conditions for use, reproduction, and 
+distribution as defined in this document 
+
+“Licensor” shall mean the copyright owner that is granting the License: 
+Jaap de Haan 
+
+“Licensee” means You either as an individual or as a single entity 
+
+“Software” means all of the contents of the files, disk(s), CD-ROM(s) or 
+other media with which this Agreement is provided 
+
+
+2. GENERAL USE 
+
+The Licensee is granted a non-exclusive License to use the Software for 
+an unlimited period of time. 
+
+The software product under this License is provided free of charge. Even 
+though a license fee is not paid for the use of such software, it does 
+not mean that there are no conditions for using such software. 
+
+o The Software may be installed and used by the Licensee for any legal 
+  purpose.
+o The Software may be installed and used by the Licensee on any 
+  number of computers owned, leased or controlled by the Licensee.
+o Use within the scope of this License is free of charge and no royalty
+  or licensing fees shall be paid by the Licensee. 
+
+  
+3. RESTRICTIONS 
+
+o Decompiling, disassembling or any reverse engineering of the binary 
+  and executable files that are part of the Software is prohibited.
+o The Licensee may not sell, rent or lease the Software alone or as part
+  of another commercial product.
+o The Licensee will not have any proprietary rights in and to the
+  Software. The Licensee acknowledges and agrees that the Licensor
+  retains all copyrights and other proprietary rights in and to the
+  Software. 
+
+
+4. REDISTRIBUTION 
+
+o The Software can be copied and distributed under the condition that 
+  original license agreement and disclaimer of warranty will stay intact 
+  and the Licensee will not charge money or fees for the Software 
+  product, except to cover distribution costs.
+o If you distribute the software as part of a publication (magazine,
+  periodical, ...), either 
+  - send one copy of the printed issue to following address, free of 
+    charge:
+		Jaap de Haan
+		Tilsiter Weg 2
+		71111 Waldenbuch
+		Germany
+  - or send an electronic version of the issue, free of charge, to
+		jaap.dehaan@color-of-code.de
+
+
+5. DISCLAIMER OF WARRANTY 
+
+THIS SOFTWARE IS PROVIDED BY JAAP DE HAAN ''AS IS'' AND ANY EXPRESS OR 
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+DISCLAIMED. 
+
+
+6. LIMITATION OF LIABILITY 
+
+IN NO EVENT SHALL JAAP DE HAAN BE LIABLE FOR ANY DIRECT, INDIRECT, 
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF 
+USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON 
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF 
+THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+
+
+7. ACCEPTING THIS LICENSE 
+
+This License Agreement is valid without Licensor's signature. It becomes 
+effective upon the earlier of Licensee's signature or Licensee's use of 
+the Software. 
+
+
+8. NON-WAIVER 
+
+If a portion of this agreement is held unenforceable, the remainder 
+shall be valid. It means that if one section of the Agreement is not 
+lawful, the rest of the Agreement is still in force. A party's failure 
+to exercise any right under this Agreement will not constitute a waiver 
+of 
+
+o any other terms or conditions of this Agreement, or
+o a right at any time thereafter to require exact and strict compliance
+  with the terms of this Agreement. 
+
+END OF LICENSE AGREEMENT 
+
+</EULA>
 	</Permissions>
 	<Affiliates>
 		<Affiliates_FORM>Y</Affiliates_FORM>
