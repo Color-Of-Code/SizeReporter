@@ -13,9 +13,10 @@ namespace SizeReporter.Output
         private XmlTextWriter _stream;
         private int _startCharPos;
 
-        public XmlResultOutput(TextWriter tw, int startPos, Boolean quiet)
+        public XmlResultOutput(String filename, int startPos, Boolean quiet)
         {
-            _stream = new XmlTextWriter(tw);
+            Name = filename;
+            _stream = new XmlTextWriter(File.CreateText(filename));
             _stream.Formatting = Formatting.Indented;
             _quiet = quiet;
             _startCharPos = startPos;
@@ -31,17 +32,30 @@ namespace SizeReporter.Output
             _stream.WriteEndElement();
         }
 
-        public void OutputResultLine(string directory, int depth, PathStatistics stats)
+        public void OutputResultLine(PathStatistics stats, bool includeRemotePath)
         {
             _stream.WriteStartElement("Directory");
-            _stream.WriteAttributeString("Path", directory.Substring(_startCharPos));
-            _stream.WriteAttributeString("Depth", depth.ToString());
+            _stream.WriteAttributeString("Path", stats.Path.Substring(_startCharPos));
+            _stream.WriteAttributeString("Depth", stats.Depth.ToString());
             _stream.WriteElementString("Files", stats.FileCount.ToString());
             _stream.WriteElementString("Directories", stats.DirectoryCount.ToString());
             _stream.WriteElementString("VirtualSize", stats.VirtualSizeMb.ToString("0.000"));
             _stream.WriteElementString("DiskSize", stats.VirtualSizeMb.ToString("0.000"));
             _stream.WriteElementString("LastModification", stats.LastChange.ToString("yyyy-MM-dd HH:mm:ss"));
+            if (includeRemotePath)
+                _stream.WriteElementString("RemotePath", stats.RemotePath ?? String.Empty);
             _stream.WriteEndElement();
+        }
+
+        public string Name
+        {
+            get;
+            private set;
+        }
+
+        public void Dispose()
+        {
+            _stream.Close();
         }
     }
 }

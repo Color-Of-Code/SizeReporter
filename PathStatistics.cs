@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 namespace SizeReporter
 {
@@ -9,6 +10,9 @@ namespace SizeReporter
         public static PathStatistics operator +(PathStatistics s1, PathStatistics s2)
         {
             PathStatistics result = new PathStatistics();
+
+            result.Depth = s1.Depth;
+            result.Path = s1.Path;
 
             result.VirtualSize = s1.VirtualSize + s2.VirtualSize;
             result.SizeOnDisk = s1.SizeOnDisk + s2.SizeOnDisk;
@@ -42,6 +46,9 @@ namespace SizeReporter
                 LastChange = lastModified;
         }
 
+        public String Path;
+        public String RemotePath;
+        public Int32 Depth;
         public DateTime LastChange;
         public UInt64 VirtualSize;
         public UInt64 SizeOnDisk;

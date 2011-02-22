@@ -2,10 +2,19 @@
 Planned
 	- HTML report
 	- user defined separator for CSV
-	- Name of report and log file can be specified on the command line
 	- option verbose displays more or less information on the console
 	- report top n biggest files
 	- ignore temporary files like thumbs.db, ...
+
+1.1.0 - 2010-11-02
+    - renamed --junctions option into --follow-junctions
+    - added --list-junctions option generating a csv file with all junctions in a subdirectory
+	- added --report-file option to set the name of the report file
+	- added --error-file option to set the name of the error file
+	- added --junctions-file option to set the name of the file for junction reporting
+	- added --empty-file option to set the name of the file for empty files reporting
+	- also report remote path linked over junctions if wanted (--remote-path)
+	- use ';' as csv on cultures having ',' as digit separator, ';' otherwise
 
 1.0.5 - 2010-06-12
     - reduced dependency to .NET 2.0

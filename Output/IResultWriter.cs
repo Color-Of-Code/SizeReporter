@@ -4,10 +4,11 @@ using System.Text;
 
 namespace SizeReporter.Output
 {
-    internal interface IResultWriter
+    internal interface IResultWriter : IDisposable
     {
+        String Name { get; }
         void ReportHeader();
         void ReportFooter();
-        void OutputResultLine(String directory, Int32 depth, PathStatistics stats);
+        void OutputResultLine(PathStatistics stats, bool includeRemotePath);
     }
 }

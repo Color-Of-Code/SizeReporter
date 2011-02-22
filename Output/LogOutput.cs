@@ -5,17 +5,27 @@ using System.Text;
 
 namespace SizeReporter.Output
 {
-    internal class LogOutput
+    internal class LogOutput : IDisposable
     {
         private Boolean _quiet = false;
         private TextWriter _stream;
         private int _startCharPos;
 
-        public LogOutput(TextWriter tw, int startPos, Boolean quiet)
+        public LogOutput(Options.Options options)
         {
-            _stream = tw;
-            _quiet = quiet;
-            _startCharPos = startPos;
+            _name = options.ErrorFile;
+            _stream = File.CreateText(_name);
+            _quiet = options.BeQuiet;
+            _startCharPos = options.StartCharPos;
+        }
+
+        private String _name;
+        public String Name
+        {
+            get
+            {
+                return _name;
+            }
         }
 
         public void LogError(String filepath, Exception exception)
@@ -75,5 +85,10 @@ namespace SizeReporter.Output
             Console.Write("\r{0}\r", value);
         }
 
+        public void Dispose()
+        {
+            _stream.Dispose();
+            _stream = null;
+        }
     }
 }

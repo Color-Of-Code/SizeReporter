@@ -57,21 +57,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileUtil.cs" />
+    <Compile Include="Objects\Junction.cs" />
     <Compile Include="Options\Options.cs" />
     <Compile Include="Output\IResultWriter.cs" />
     <Compile Include="Output\LogOutput.cs" />
     <Compile Include="Output\CsvResultOutput.cs" />
+    <Compile Include="Output\ResultWriterFactory.cs" />
     <Compile Include="Output\XmlResultOutput.cs" />
     <Compile Include="PathStatistics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="pad\SizeReporter.png" />
+    <None Include="pad\SizeReporter_Icon.ico" />
+    <None Include="pad\SizeReporter_Icon.png" />
+    <None Include="pad\SizeReporter_PAD.xml" />
     <Content Include="ReleaseNotes.txt" />
     <Content Include="SizeReporter_Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="pad\www.color-of-code.de-link to sizereporter.url" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

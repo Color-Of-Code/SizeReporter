@@ -10,59 +10,12 @@ namespace SizeReporter
 {
     class Program
     {
-        private static Options.Options  _options;
-        private static DateTime         _timeStart;
-        private static DateTime         _timeEnd;
-        private static List<String>     _emptyFiles;
-
-        private static UInt32 _clusterSize;
-        private static int _startCharPos;
-
-        private static Output.LogOutput _log;
-        private static Output.IResultWriter _report;
-        
         static void Main(string[] args)
         {
             try
             {
-                _options = new Options.Options(args);
-                if (_options.Exit) 
-                    return;
-
-                if (_options.ReportEmpty)
-                    _emptyFiles = new List<string>();
-
-                if (_options.Culture != null)
-                    Thread.CurrentThread.CurrentCulture = _options.Culture;
-
-                _clusterSize = DetermineClusterSize(_options.Directory.Root.FullName);
-
-                _timeStart = DateTime.Now;
-                String timestamp = _timeStart.ToString("yyyyMMdd-HHmmss");
-                
-                String extension = "csv";
-                if (_options.Xml)
-                    extension = "xml";
-                String filename1 = String.Format("sizereport_result_{0}.{1}", timestamp, extension);
-
-                String filename2 = String.Format("sizereport_errors_{0}.log", timestamp); ;
-                using (TextWriter _streamResult = File.CreateText(filename1))
-                {
-                    using (TextWriter streamErrors = File.CreateText(filename2))
-                    {
-                        PerformJob(_streamResult, streamErrors, filename1, filename2);
-                    }
-                }
-
-                if (_options.ReportEmpty)
-                {
-                    String filename = String.Format("sizereport_emptyfiles_{0}.log", timestamp);
-                    using (TextWriter stream = File.CreateText(filename))
-                    {
-                        foreach (String file in _emptyFiles)
-                            stream.WriteLine(file);
-                    }
-                }
+                Program sizeReporter = new Program(args);
+                sizeReporter.Run();
             }
             catch (Exception ex)
             {
@@ -74,45 +27,119 @@ namespace SizeReporter
             }
         }
 
-        private static void PerformJob(TextWriter streamResult, TextWriter streamErrors,
-            String filename1, String filename2)
+        private Options.Options _options;
+        private DateTime _timeStart;
+        private DateTime _timeEnd;
+        private List<Junction> _junctions;
+        private List<String> _emptyFiles;
+
+        private UInt32 _clusterSize;
+
+        private Program(string[] args)
         {
-            String path = FileUtil.GetLongEscapedPathname(_options.Directory.FullName);
-            _startCharPos = path.Length;
-
-            _log = new Output.LogOutput(streamErrors, path.Length, _options.BeQuiet);
-            if (_options.Xml)
-                _report = new Output.XmlResultOutput(streamResult, path.Length, _options.BeQuiet);
-            else
-                _report = new Output.CsvResultOutput(streamResult, path.Length, _options.BeQuiet, _options.Tsv);
-
-            _log.LogInfo("Start at {0:yyyy-MM-dd HH:mm:ss}", _timeStart);
-            ConsoleWrite("Generating result into {0}", filename1);
-            ConsoleWrite("Reporting errors into {0}", filename2);
-            
-            _report.ReportHeader();
-            PathStatistics total = Process(path, 0);
-
-            _timeEnd = DateTime.Now;
-            _log.LogInfo("End at {0:yyyy-MM-dd HH:mm:ss}", _timeEnd);
-            TimeSpan duration = _timeEnd - _timeStart;
-            _log.LogInfo("Duration: {0}", duration);
+            _options = new Options.Options(args);
         }
 
-        private static PathStatistics Process(String directory, Int32 depth)
+        private void Run()
+        {
+            if (_options.Exit)
+                return;
+
+            if (_options.ReportEmpty)
+                _emptyFiles = new List<string>();
+
+            if (_options.ListJunctions)
+                _junctions = new List<Junction>();
+
+            if (_options.Culture != null)
+                Thread.CurrentThread.CurrentCulture = _options.Culture;
+
+            _clusterSize = DetermineClusterSize(_options.Directory.Root.FullName);
+
+            _timeStart = DateTime.Now;
+
+            using (Output.IResultWriter result = Output.ResultWriterFactory.Build(_options))
+            {
+                using (Output.LogOutput log = new Output.LogOutput(_options))
+                {
+                    PerformJob(result, log);
+                }
+            }
+
+            ReportEmptyFiles();
+            ReportJunctions();
+        }
+
+        private void ReportEmptyFiles()
+        {
+            if (_options.ReportEmpty)
+            {
+                using (TextWriter stream = File.CreateText(_options.EmptyFilesFile))
+                {
+                    foreach (String file in _emptyFiles)
+                        stream.WriteLine(file);
+                }
+            }
+        }
+
+        private void ReportJunctions()
+        {
+            if (_options.ListJunctions)
+            {
+                using (TextWriter stream = File.CreateText(_options.JunctionsFile))
+                {
+                    _junctions.Sort();
+                    stream.WriteLine("Source;Target");
+                    foreach (Junction junction in _junctions)
+                        stream.WriteLine("\"{0}\";\"{1}\"",
+                            junction.Source.Substring(_options.StartCharPos), junction.Target);
+                }
+            }
+        }
+
+        private void PerformJob(Output.IResultWriter writer, Output.LogOutput logOutput)
+        {
+            String path = FileUtil.GetLongEscapedPathname(_options.Directory.FullName);
+
+            logOutput.LogInfo("Start at {0:yyyy-MM-dd HH:mm:ss}", _timeStart);
+            ConsoleWrite("Generating result into {0}", writer.Name);
+            ConsoleWrite("Reporting errors into {0}", logOutput.Name);
+
+            writer.ReportHeader();
+            PathStatistics total = Process(writer, logOutput, path, 0);
+
+            _timeEnd = DateTime.Now;
+            logOutput.LogInfo("End at {0:yyyy-MM-dd HH:mm:ss}", _timeEnd);
+            TimeSpan duration = _timeEnd - _timeStart;
+            logOutput.LogInfo("Duration: {0}", duration);
+        }
+
+        private PathStatistics Process(Output.IResultWriter writer, Output.LogOutput _log,
+            String directory, Int32 depth)
         {
             PathStatistics stats = new PathStatistics();
-            RefreshLastModified(ref stats, directory);
+            stats.Path = directory;
+            stats.Depth = depth;
+
+            RefreshLastModified(_log, ref stats, directory);
             if (depth <= _options.MaxDepth)
             {
                 OutputCurrentPosition(directory);
             }
-            foreach (String directorypath in FileUtil.FindDirectoriesSorted(directory, _options.FollowJunctions))
+
+            if (_options.ListJunctions)
+            {
+                IList<Junction> junctions = FileUtil.FindJunctions(directory);
+                _junctions.AddRange(junctions);
+            }
+
+            IList<String> directories = FileUtil.FindDirectoriesSorted(directory, _options.FollowJunctions);
+            foreach (String directorypath in directories)
             {
                 try
                 {
-                    stats += Process(directorypath, depth + 1);
-                    RefreshLastModified(ref stats, directorypath);
+                    stats += Process(writer, _log, directorypath, depth + 1);
+                    RefreshLastModified(_log, ref stats, directorypath);
                     stats.DirectoryCount++;
                 }
                 catch (Exception exception)
@@ -121,7 +148,8 @@ namespace SizeReporter
                 }
             }
 
-            foreach (String filepath in FileUtil.FindFilesSorted(directory))
+            IList<String> filepaths = FileUtil.FindFilesSorted(directory);
+            foreach (String filepath in filepaths)
             {
                 try
                 {
@@ -132,7 +160,7 @@ namespace SizeReporter
                     UInt64 csize = FileUtil.GetCompressedFileSize(shortfilename);
                     if (csize > vsize)
                     {
-                        _log.LogWarning(filepath, 
+                        _log.LogWarning(filepath,
                             String.Format(" -> compressed size > real size! ({0}>{1})",
                             csize, vsize));
                     }
@@ -141,8 +169,8 @@ namespace SizeReporter
 
                     UInt64 clusters = (csize + _clusterSize - 1) / _clusterSize;
                     stats.VirtualSize += vsize;
-                    stats.SizeOnDisk  += clusters * _clusterSize;
-                    UpdateLastModified(ref stats, filepath, ref lastModified);
+                    stats.SizeOnDisk += clusters * _clusterSize;
+                    UpdateLastModified(_log, ref stats, filepath, ref lastModified);
                     stats.FileCount++;
                 }
                 catch (Exception exception)
@@ -153,16 +181,34 @@ namespace SizeReporter
 
             if (depth <= _options.MaxDepth)
             {
-                _report.OutputResultLine(directory, depth, stats);
+                if (_options.RemotePath)
+                {
+                    if (_junctions.Count > 0)
+                    {
+                        String sourcePath = stats.Path;
+                        List<Junction> juncties = _junctions.FindAll(x => sourcePath.StartsWith(x.Source));
+                        juncties.Sort();
+                        if (juncties.Count > 0)
+                        {
+                            Junction shortest = juncties[0];
+                            stats.RemotePath = stats.Path.Replace(shortest.Source, shortest.Target);
+                        }
+                    }
+                    writer.OutputResultLine(stats, true);
+                }
+                else
+                {
+                    writer.OutputResultLine(stats, false);
+                }
             }
             return stats;
         }
 
-        private static void UpdateLastModified(ref PathStatistics stats, String filepath, ref DateTime lastModified)
+        private void UpdateLastModified(Output.LogOutput log, ref PathStatistics stats, String filepath, ref DateTime lastModified)
         {
             if (lastModified > DateTime.Now.AddDays(1))
             {
-                _log.LogWarning(filepath,
+                log.LogWarning(filepath,
                     String.Format(" -> date of last modification lies in future (ignored)! ({0})",
                     lastModified.ToString("yyyy-MM-dd HH:mm:ss")));
             }
@@ -172,11 +218,11 @@ namespace SizeReporter
             }
         }
 
-        private static void RefreshLastModified(ref PathStatistics stats, String directorypath)
+        private void RefreshLastModified(Output.LogOutput log, ref PathStatistics stats, String directorypath)
         {
             DateTime lastModified;
             FileUtil.GetLastModified(directorypath, out lastModified);
-            UpdateLastModified(ref stats, directorypath, ref lastModified);
+            UpdateLastModified(log, ref stats, directorypath, ref lastModified);
         }
 
         private static void ClearConsoleLine()
@@ -187,12 +233,12 @@ namespace SizeReporter
             Console.Write("\r{0}\r", value);
         }
 
-        private static void OutputCurrentPosition(String directory)
+        private void OutputCurrentPosition(String directory)
         {
             if (!_options.BeQuiet)
             {
                 int maxlen = Console.WindowWidth - 1;
-                String value = String.Format("> .{0}", directory.Substring(_startCharPos));
+                String value = String.Format("> .{0}", directory.Substring(_options.StartCharPos));
                 if (value.Length > maxlen)
                     value = value.Substring(0, maxlen);
                 value = value.PadRight(maxlen);
@@ -200,7 +246,7 @@ namespace SizeReporter
             }
         }
 
-        private static uint DetermineClusterSize(String rootDirectory)
+        private uint DetermineClusterSize(String rootDirectory)
         {
             uint clustersize = 0;
 
@@ -226,7 +272,7 @@ namespace SizeReporter
             return clustersize;
         }
 
-        private static void ConsoleWrite(String format, params object[] args)
+        private void ConsoleWrite(String format, params object[] args)
         {
             if (!_options.BeQuiet)
             {

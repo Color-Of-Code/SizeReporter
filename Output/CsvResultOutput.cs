@@ -13,14 +13,22 @@ namespace SizeReporter.Output
         private int _startCharPos;
         private String _separator;
 
-        public CsvResultOutput(TextWriter tw, int startPos, Boolean quiet, Boolean tabSeparated)
+        public CsvResultOutput(String filename, int startPos, Boolean quiet, Boolean tabSeparated)
         {
+            Name = filename;
+            _stream = File.CreateText(filename);
             if (tabSeparated)
+            {
                 _separator = "\t";
+            }
             else
-                _separator = ";";
+            {
+                if (System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator == ",")
+                    _separator = ";";
+                else
+                    _separator = ",";
+            }
             //_verbose = true;
-            _stream = tw;
             _quiet = quiet;
             _startCharPos = startPos;
         }
@@ -32,12 +40,25 @@ namespace SizeReporter.Output
                 _separator);
         }
 
-        public void OutputResultLine(String directory, Int32 depth, PathStatistics stats)
+        public void OutputResultLine(PathStatistics stats, bool includeRemotePath)
         {
-            String resultLine = String.Format("{1}{0}{2}{0}{3}{0}{4:0.000}{0}{5:0.000}{0}{6:yyyy-MM-dd HH:mm:ss}{0}\".{7}\"",
-                _separator, depth, stats.FileCount, stats.DirectoryCount,
-                stats.VirtualSizeMb, stats.SizeOnDiskMb,
-                stats.LastChange, directory.Substring(_startCharPos));
+            String resultLine = null;
+            if (includeRemotePath)
+            {
+                String remotePath = stats.RemotePath ?? String.Empty;
+                resultLine = String.Format(
+                    "{1}{0}{2}{0}{3}{0}{4:0.000}{0}{5:0.000}{0}{6:yyyy-MM-dd HH:mm:ss}{0}\"{7}\"{0}\"{8}\"",
+                    _separator, stats.Depth, stats.FileCount, stats.DirectoryCount,
+                    stats.VirtualSizeMb, stats.SizeOnDiskMb,
+                    stats.LastChange, stats.Path.Substring(_startCharPos), remotePath);
+            }
+            else
+            {
+                resultLine = String.Format("{1}{0}{2}{0}{3}{0}{4:0.000}{0}{5:0.000}{0}{6:yyyy-MM-dd HH:mm:ss}{0}\".{7}\"",
+                    _separator, stats.Depth, stats.FileCount, stats.DirectoryCount,
+                    stats.VirtualSizeMb, stats.SizeOnDiskMb,
+                    stats.LastChange, stats.Path.Substring(_startCharPos));
+            }
             //if (!_quiet && _verbose)
             //{
             //    ClearConsoleLine();
@@ -56,6 +77,17 @@ namespace SizeReporter.Output
 
         public void ReportFooter()
         {
+        }
+
+        public string Name
+        {
+            get;
+            private set;
+        }
+
+        public void Dispose()
+        {
+            _stream.Dispose();
         }
     }
 }

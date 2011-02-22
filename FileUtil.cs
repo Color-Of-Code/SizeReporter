@@ -285,6 +285,41 @@ namespace SizeReporter
             return results;
         }
 
+        public static List<Junction> FindJunctions(string dirName)
+        {
+            List<Junction> results = new List<Junction>();
+            WIN32_FIND_DATA findData;
+            IntPtr findHandle = _FindFirstFile(dirName + @"\*", out findData);
+
+            if (findHandle != INVALID_HANDLE_VALUE)
+            {
+                bool found;
+                do
+                {
+                    string currentFileName = findData.cFileName;
+
+                    if ((findData.dwFileAttributes & FileAttributes.Directory) != 0)
+                    {
+                        if ((findData.dwFileAttributes & FileAttributes.ReparsePoint) != 0)
+                        {
+                            if (currentFileName != "." && currentFileName != "..")
+                            {
+                                String source = Path.Combine(dirName, currentFileName);
+                                results.Add(new Junction(source));
+                            }
+                        }
+                    }
+                    // find next
+                    found = _FindNextFile(findHandle, out findData);
+                }
+                while (found);
+            }
+
+            // close the find handle
+            _FindClose(findHandle);
+            return results;
+        }
+
         // Assume dirName passed in is already prefixed with \\?\
         public static List<string> FindDirectories(string dirName, bool followLinks)
         {
