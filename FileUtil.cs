@@ -166,6 +166,10 @@ namespace SizeReporter
             [MarshalAs(UnmanagedType.LPTStr)]StringBuilder lpszShortPath,
             uint cchBuffer);
 
+        [DllImport("kernel32.dll", EntryPoint = "GetLastError")]
+        internal static extern uint _GetLastError();
+
+
         #endregion
 
         public static uint GetClusterSize(String dir)
@@ -182,10 +186,21 @@ namespace SizeReporter
 
         public static string ToShortPathName(string longName)
         {
-            uint bufferSize = 256;
+            uint bufferSize = 1024;
             // don´t allocate stringbuilder here but outside of the function for fast access
             StringBuilder shortNameBuffer = new StringBuilder((int)bufferSize);
             uint result = _GetShortPathName(longName, shortNameBuffer, bufferSize);
+            if (result == 0)
+            {
+                uint error = _GetLastError();
+                // 1008: An attempt was made to reference a token that does not exist. ERROR_NO_TOKEN
+                if (error == 1008)
+                    return longName;
+                // 0005: Access is denied. ERROR_ACCESS_DENIED
+                if (error == 5)
+                    return longName;
+                throw new Exception(error.ToString());
+            }
             return shortNameBuffer.ToString();
         }
 
@@ -338,7 +353,10 @@ namespace SizeReporter
                 lastModified = DateTime.FromFileTime(filetime);
                 return;
             }
-            throw new Exception("Could not get file attributes");
+            uint error = _GetLastError();
+            // 1008: An attempt was made to reference a token that does not exist. ERROR_NO_TOKEN
+            // 0005: Access is denied. ERROR_ACCESS_DENIED
+            throw new Exception(String.Format("Could not get file attributes (win32 error {0})", error));
         }
 
         public static void GetLastModified(string filename, out DateTime lastModified)
