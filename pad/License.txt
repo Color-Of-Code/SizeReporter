@@ -1,6 +1,6 @@
 FREEWARE SOFTWARE LICENSE AGREEMENT 
 
-Copyright 2010-2011 Jaap de Haan, http://www.color-of-code.de 
+Copyright 2010-2019 Jaap de Haan, https://color-of-code.de 
 
 NOTICE TO USER: 
 
@@ -13,15 +13,15 @@ agree, do not use this Software.
 
 1. DEFINITIONS 
 
-“License” shall mean the terms and conditions for use, reproduction, and 
+"License" shall mean the terms and conditions for use, reproduction, and 
 distribution as defined in this document 
 
-“Licensor” shall mean the copyright owner that is granting the License: 
+"Licensor" shall mean the copyright owner that is granting the License: 
 Jaap de Haan 
 
-“Licensee” means You either as an individual or as a single entity 
+"Licensee" means You either as an individual or as a single entity 
 
-“Software” means all of the contents of the files, disk(s), CD-ROM(s) or 
+"Software" means all of the contents of the files, disk(s), CD-ROM(s) or 
 other media with which this Agreement is provided 
 
 

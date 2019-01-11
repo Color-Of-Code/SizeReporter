@@ -209,7 +209,7 @@ namespace SizeReporter.Options
             Console.WriteLine(@"Version: {0}", Assembly.GetExecutingAssembly().GetName().Version);
             Console.WriteLine(@"Author:");
             Console.WriteLine(@"  Jaap de Haan <jaap.dehaan@color-of-code.de>");
-            Console.WriteLine(@"  http://www.color-of-code.de");
+            Console.WriteLine(@"  https://color-of-code.de");
         }
 
     }
